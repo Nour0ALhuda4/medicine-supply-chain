@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة التسجيل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/assets/css/auth/auth.css">
+</head>
+
+<body>
+    <div id="register-container" class="container">
+        <div class="right">
+            <h2 id="m1">تسجيل جديد</h2>
+            <form id="registerForm">
+                <input type="text" name="username" placeholder="اسم المستخدم" required>
+                <input type="tel" name="phoneNumber" placeholder="رقم الجوال" required>
+                <input type="password" name="password" placeholder="كلمة المرور" required>
+                <button type="submit">تسجيل</button>
+            </form>
+        </div>
+        <div class="bn">
+            <h2>مرحباً بعودتك!</h2>
+            <p>هل لديك حساب بالفعل؟</p>
+            <button class="switch-btn" onclick="window.location.href='/login'">تسجيل الدخول</button>
+        </div>
+    </div>
+    <script type="module">
+        import { register } from '/assets/js/auth.js';
+        document.getElementById('registerForm').addEventListener('submit', register);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SafeMed - نظام تتبع الأدوية الآمن">
+  <title>SafeMed</title>
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components/header.css">
+  <link rel="stylesheet" href="/assets/css/home.css">
+  <link rel="stylesheet" href="/assets/css/components/faq.css">
+  <link rel="stylesheet" href="/assets/css/components/contact.css">
+
+  <!-- Components -->
+  <script src="/assets/components/header.js" type="module"></script>
+</head>
+
+<body>
+  <!-- Header Component -->
+  <site-header></site-header>
+
+  <!-- Home Section -->
+  <section id="home" class="section">
+    <div class="container">
+      <div id="home-content">
+        <div id="home-image">
+          <img src="/assets/images/emp.jpg" alt="صورة التوضيح" loading="lazy" />
+        </div>
+        <div id="home-text">
+          <h1>في عالم الأدوية ، الأمان هو هدفنا</h1>
+          <h2>لأن صحتك تهمنا ، نقدم لك الدواء الآمن</h2>
+          <p>
+            نهدف إلى تحقيق صحة وسلامة المرضى من خلال ضمان توفير الأدوية الآمنة والموثوقة.
+            نركز على مكافحة تزوير الأدوية وتعزيز الثقة في المنتجات الطبية التي نقدمها.
+            التزامنا بتقديم الأدوية عالية الجودة يتماشى مع معايير الصحة العالمية مما يعكس
+            رغبتنا العميقة في حماية المرضى من المخاطر الناتجة عن الأدوية المزورة.
+            نحن نعمل جاهدين لضمان راحة بالك وسلامتك مع كل جرعة دواء تتناولها.
+            <span class="highlight">لأن صحتك هي أولويتنا.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Track Button Section -->
+  <section class="section">
+    <div class="image-container">
+      <img src="/assets/images/robot.png" alt="روبوت المساعدة" class="centered-image" loading="lazy" />
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="section">
+    <div class="container">
+      <h1 style="text-align: center;">أسئلة شائعة</h1>
+      <div class="faq-item">
+        <h3>ما هي الخدمات الأحدث المتوفرة لاكتشاف وتتبع الأدوية المزورة؟</h3>
+        <p>
+          يوفر التحديث الأخير للوكالة الاقتصادية تقنية IoT للتتبع الرقمي، وتقنية
+          Blockchain لتتبع تاريخ التصنيع.
+        </p>
+      </div>
+      <div class="faq-item">
+        <h3>ساعات العمل</h3>
+        <p>نعمل من 9 صباحاً إلى 5 مساءً، يومياً.</p>
+      </div>
+      <div class="faq-item">
+        <h3>لماذا فشلت بعض الدول في مكافحة الأدوية المزورة؟</h3>
+        <p>بسبب ضعف القوانين والرقابة والضبط.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section">
+    <div class="container">
+      <div class="contact">
+        <h1>للتواصل معنا</h1>
+        <input type="email" value="www.safemed.com" readonly />
+        <input type="text" value="962797900900+" readonly />
+      </div>
+    </div>
+  </section>
+
+  <!-- Mobile Navigation Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const header = document.querySelector('site-header');
+      if (header) {
+        const nav = header.shadowRoot?.querySelector('nav');
+        if (nav) {
+          // Add mobile menu toggle functionality here if needed
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

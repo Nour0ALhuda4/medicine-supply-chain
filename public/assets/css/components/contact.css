@@ -1,0 +1,62 @@
+/* Contact Section Styles */
+.contact {
+  background-color: var(--text-color);
+  border: 4px solid var(--primary-color);
+  border-radius: 30px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.contact h1 {
+  color: var(--primary-color);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.contact input {
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  margin-bottom: 1.5rem;
+  border: none;
+  border-bottom: 2px solid var(--secondary-color);
+  background: none;
+  font-size: clamp(1rem, 3vw, 1.8rem);
+  color: var(--secondary-color);
+  outline: none;
+  text-align: center;
+  font-weight: bold;
+}
+
+.contact input[readonly] {
+  background: transparent;
+  cursor: default;
+}
+
+.contact input:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .contact {
+    width: 90%;
+    padding: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .contact {
+    padding: 1rem;
+  }
+
+  .contact input {
+    font-size: 1rem;
+    height: 35px;
+  }
+}

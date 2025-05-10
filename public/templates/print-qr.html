@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>طباعة رمز QR - تتبع الشحنات</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+      body {
+        font-family: 'IBM Plex Sans Arabic', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+        background: white;
+      }
+
+      .print-container {
+        text-align: center;
+      }
+
+      .qr-code-container {
+        padding: 20px;
+        margin: 20px 0;
+      }
+
+      .shipment-info {
+        margin: 20px 0;
+      }
+
+      @media print {
+        body {
+          padding: 0;
+        }
+        
+        .no-print {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="print-container">
+      <div id="qrcode" class="qr-code-container"></div>
+      <div class="shipment-info">
+        <h2>رقم الشحنة: <span id="shipmentId"></span></h2>
+      </div>
+      <button onclick="window.print()" class="no-print">طباعة</button>
+    </div>
+
+    <script>
+      // Get shipment ID from URL
+      const params = new URLSearchParams(window.location.search);
+      const shipmentId = params.get('id');
+      
+      if (shipmentId) {
+        document.getElementById('shipmentId').textContent = shipmentId;
+        
+        // Generate QR code
+        const url = `${window.location.origin}/templates/status.html?id=${shipmentId}`;
+        new QRCode(document.getElementById('qrcode'), {
+          text: url,
+          width: 256,
+          height: 256,
+          colorDark: '#4682b4',
+          colorLight: '#ffffff'
+        });
+      }
+    </script>
+  </body>
+</html>

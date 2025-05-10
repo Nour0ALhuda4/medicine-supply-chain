@@ -1,0 +1,157 @@
+/* Navigation styles */
+:root {
+  --nav-height: 60px;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: var(--nav-height);
+  background: var(--primary-color);
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  align-items: center;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.logo img {
+  height: 100%;
+  transition: transform 0.3s ease-in-out;
+}
+
+.logo img:hover {
+  transform: scale(1.05);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: color 0.3s;
+  padding: 0.5rem 1rem;
+}
+
+.nav-links li a:hover {
+  color: var(--secondary-color);
+}
+
+/* User Menu Styles */
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.username-link {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: all 0.3s;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--secondary-color);
+  border-radius: 20px;
+}
+
+.username-link:hover {
+  background: var(--secondary-color);
+  color: var(--text-color);
+}
+
+/* Logout Button Style */
+.logout-btn {
+  background-color: transparent;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.logout-btn:hover {
+  color: var(--secondary-color);
+}
+
+/* Mobile Navigation */
+@media screen and (max-width: 768px) {
+  nav {
+    padding: 0.5rem;
+  }
+
+  .logo img {
+    width: 80px;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 70px;
+    right: -100%;
+    width: 100%;
+    height: calc(100vh - 70px);
+    background: var(--primary-color);
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+    transition: right 0.3s ease-in-out;
+    gap: 1.5rem;
+  }
+
+  .nav-links.active {
+    right: 0;
+  }
+
+  .nav-links li a {
+    font-size: 1.1rem;
+  }
+
+  .user-menu {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .username-link {
+    font-size: 1.1rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .logout-btn {
+    font-size: 1.1rem;
+    width: auto;
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Hamburger Menu Button */
+.menu-toggle {
+  display: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+}
+
+@media screen and (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+}

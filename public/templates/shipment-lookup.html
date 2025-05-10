@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>بحث عن شحنة - تتبع الشحنات</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="/assets/css/shipment-lookup.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="lookup-container">
+        <h1>البحث عن شحنة</h1>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+          <button class="tab-btn active" data-tab="manual">إدخال رقم الشحنة</button>
+          <button class="tab-btn" data-tab="scan">مسح رمز QR</button>
+        </div>
+
+        <!-- Manual Entry Tab -->
+        <div class="tab-content active" id="manual-tab">
+          <div class="input-group">
+            <label for="shipmentId">رقم الشحنة</label>
+            <input
+              type="text"
+              id="shipmentId"
+              name="shipmentId"
+              placeholder="أدخل رقم الشحنة"
+              dir="ltr"
+            />
+          </div>
+          <button id="lookupBtn" class="primary-btn">
+            <i class="fas fa-search"></i>
+            بحث
+          </button>
+        </div>
+
+        <!-- QR Scanner Tab -->
+        <div class="tab-content" id="scan-tab">
+          <div class="scanner-container">
+            <video id="preview"></video>
+            <div class="scanner-overlay">
+              <div class="scanner-frame"></div>
+            </div>
+            <div class="upload-container">
+              <label for="imageUpload" class="upload-btn">
+                <i class="fas fa-upload"></i>
+                تحميل صورة QR
+              </label>
+              <input type="file" id="imageUpload" accept="image/*" capture="environment" />
+            </div>
+          </div>
+          <p class="scanner-help">وجه الكاميرا نحو رمز QR للشحنة أو قم بتحميل صورة</p>
+          <canvas id="imageCanvas" style="display: none;"></canvas>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="loading-container hidden">
+          <div class="loading-spinner"></div>
+          <p>جاري البحث...</p>
+        </div>
+
+        <!-- Error Message -->
+        <div id="error" class="error-message hidden">
+          <i class="fas fa-exclamation-circle"></i>
+          <p></p>
+        </div>
+      </div>
+    </div>
+
+    <script src="/assets/js/shipment-lookup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,231 @@
+/* Shipment Lookup Page Styles */
+.lookup-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.lookup-container h1 {
+  color: #333;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  display: flex;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #eee;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 1rem;
+  border: none;
+  background: none;
+  color: #666;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+  color: #333;
+}
+
+.tab-btn.active {
+  color: #007bff;
+  border-bottom: 2px solid #007bff;
+  margin-bottom: -2px;
+}
+
+/* Tab Content */
+.tab-content {
+  display: none;
+  padding: 1rem 0;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Manual Entry Form */
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* QR Scanner */
+.scanner-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #000;
+}
+
+#preview {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.scanner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scanner-frame {
+  width: 250px;
+  height: 250px;
+  border: 2px solid #4682b4;
+  border-radius: 12px;
+  position: relative;
+  animation: scan 2s infinite;
+}
+
+.upload-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.7);
+  text-align: center;
+}
+
+.upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #4682b4;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.upload-btn:hover {
+  background-color: #3a6d94;
+}
+
+.upload-btn i {
+  font-size: 1.1em;
+}
+
+#imageUpload {
+  display: none;
+}
+
+@keyframes scan {
+  0% {
+    box-shadow: 0 0 0 0 rgba(70, 130, 180, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgba(70, 130, 180, 0);
+  }
+}
+
+.scanner-help {
+  text-align: center;
+  color: #666;
+  margin-top: 15px;
+  font-size: 0.9em;
+}
+
+/* Buttons */
+.primary-btn {
+  width: 100%;
+  padding: 1rem;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.primary-btn:hover {
+  background: #0056b3;
+}
+
+/* Loading State */
+.loading-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.loading-spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #4682b4;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 10px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error Message */
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 15px;
+}
+
+.error-message i {
+  font-size: 1.2em;
+}
+
+.hidden {
+  display: none;
+}

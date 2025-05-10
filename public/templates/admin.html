@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - إدارة الشحنات</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/status.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #8ec3f9;
+        }
+        .container {
+            padding: 2rem;
+        }
+        h1 {
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="container">
+        <h1 class="text-center mb-4">لوحة التحكم</h1>
+        
+        <div class="shipments-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>رقم الشحنة</th>
+                        <th>الوصف</th>
+                        <th>المستخدم</th>
+                        <th>رقم الجهاز</th>
+                        <th>الحالة الحالية</th>
+                        <th>تغيير الحالة</th>
+                        <th>درجة الحرارة</th>
+                        <th>الرطوبة</th>
+                        <th>آخر تحديث</th>
+                    </tr>
+                </thead>
+                <tbody id="shipmentsTableBody">
+                    <!-- Shipments will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script type="module" src="/assets/components/header.js"></script>
+    <script type="module" src="/assets/components/footer.js"></script>
+    <script type="module" src="/assets/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+.shipments-table {
+    width: 100%;
+    margin-top: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+.shipments-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    color: #4682b4;
+}
+
+.shipments-table th {
+    background: #4682b4;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.shipments-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    color: #4682b4;
+}
+
+/* Make shipment number, user, and arduino_id columns narrower */
+.shipments-table td:first-child,
+.shipments-table td:nth-child(3),
+.shipments-table td:nth-child(4) {
+    white-space: nowrap;
+    font-family: monospace;
+}
+
+/* Make description column wider */
+.shipments-table td:nth-child(2) {
+    min-width: 200px;
+}
+
+/* Style for temperature and humidity cells */
+.shipments-table td:nth-child(7),
+.shipments-table td:nth-child(8) {
+    font-family: monospace;
+    white-space: nowrap;
+}
+
+/* Style for last update column */
+.shipments-table td:last-child {
+    white-space: nowrap;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+/* Style for status column */
+.shipments-table td:nth-child(5) {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+/* Style for status select column */
+.shipments-table td:nth-child(6) {
+    text-align: center;
+}
+
+.status-select {
+    padding: 0.5rem;
+    border: 2px solid #4682b4;
+    border-radius: 4px;
+    background: white;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 120px;
+    color: #4682b4;
+}
+
+.status-select:hover {
+    border-color: #a68bd8;
+}
+
+.status-select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(166, 139, 216, 0.3);
+}
+
+/* Match timeline point colors */
+.status-select option[value="تم التوصيل"] {
+    color: #a68bd8;
+}
+
+.status-select option:not([value="تم التوصيل"]) {
+    color: #4682b4;
+}
+
+/* Add hover effect to rows */
+.shipments-table tbody tr:hover {
+    background-color: rgba(142, 195, 249, 0.1);
+}

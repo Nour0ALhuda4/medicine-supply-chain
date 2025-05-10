@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الشحنات - نظام تتبع الشحنات</title>
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #4682b4;
+        --secondary-color: #a68bd8;
+        --background-color: #8ec3f9;
+        --text-color: #ffffff;
+      }
+
+      body {
+        font-family: "IBM Plex Sans Arabic", sans-serif;
+        background: var(--background-color);
+        margin: 0;
+        padding: 0;
+      }
+
+      .shipments-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+
+      .shipments-table {
+        width: 100%;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border-collapse: collapse;
+      }
+
+      .shipments-table th {
+        background: linear-gradient(
+          to left,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: var(--text-color);
+        padding: 1rem;
+        text-align: right;
+        font-weight: 600;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      .shipments-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .shipments-table tr:hover {
+        background: #f9fafb;
+      }
+
+      .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        display: inline-block;
+        text-align: center;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+      }
+
+      .status-badge:hover {
+        transform: translateY(-1px);
+      }
+
+      .status-pending {
+        background: #f3f4f6;
+        color: #374151;
+      }
+
+      .status-shipped {
+        background: var(--primary-color);
+        color: var(--text-color);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      .status-in-transit {
+        background: var(--secondary-color);
+        color: var(--text-color);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      .status-delivered {
+        background: linear-gradient(
+          to right,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: var(--text-color);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      .action-button {
+        background: var(--primary-color);
+        color: var(--text-color);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: all 0.2s;
+        display: inline-block;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .action-button:hover {
+        background: var(--secondary-color);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #6b7280;
+      }
+
+      .new-shipment-button {
+        background: var(--secondary-color);
+        color: var(--text-color);
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 1.5rem;
+        transition: all 0.2s;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .new-shipment-button:hover {
+        background: var(--primary-color);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .error-message {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        display: none;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.5/ethers.umd.min.js"></script>
+  </head>
+  <body>
+    <div class="shipments-container">
+      <div id="error-message" class="error-message"></div>
+
+      <table class="shipments-table">
+        <thead>
+          <tr>
+            <th>رقم الشحنة</th>
+            <th>الوصف</th>
+            <th>رقم الجهاز</th>
+            <th>الحالة</th>
+            <th>تاريخ الإنشاء</th>
+            <th>آخر تحديث</th>
+            <th>الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody id="shipments-table-body">
+          <!-- Will be populated by JavaScript -->
+        </tbody>
+      </table>
+    </div>
+
+    <script type="module">
+      import { authenticatedFetch } from "/assets/js/utils/api.js";
+
+      // Status mapping
+      const statusMap = {
+        pending: { text: "تم التجهيز", class: "status-pending" },
+        shipped: { text: "تم الشحن", class: "status-shipped" },
+        in_transit: { text: "في الطريق", class: "status-in-transit" },
+        delivered: { text: "تم التوصيل", class: "status-delivered" },
+        "تم التجهيز": { text: "تم التجهيز", class: "status-pending" },
+        "تم الشحن": { text: "تم الشحن", class: "status-shipped" },
+        "في الطريق": { text: "في الطريق", class: "status-in-transit" },
+        "تم التوصيل": { text: "تم التوصيل", class: "status-delivered" },
+      };
+
+      // Format date for display
+      function formatDate(dateString) {
+        return new Date(dateString).toLocaleString("ar-EG", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      }
+
+      // Create table row for a shipment
+      function createShipmentRow(shipment) {
+        const status = statusMap[shipment.current_status] || {
+          text: shipment.current_status,
+          class: "status-pending",
+        };
+
+        return `
+                <tr>
+                    <td>${shipment.id}</td>
+                    <td>${shipment.description}</td>
+                    <td>${shipment.arduino_id}</td>
+                    <td>
+                        <span class="status-badge ${status.class}">${
+          status.text
+        }</span>
+                    </td>
+                    <td>${formatDate(shipment.created_at)}</td>
+                    <td>${
+                      shipment.last_update
+                        ? formatDate(shipment.last_update)
+                        : "-"
+                    }</td>
+                    <td>
+        <a href="/templates/status.html?id=${shipment.id}" 
+   class="action-button track-btn" 
+   data-shipment-id="${shipment.id}">
+    تتبع
+</a>
+        </td>
+                </tr>
+            `;
+      }
+
+      // Load and display shipments
+      async function loadShipments() {
+        try {
+          const response = await authenticatedFetch("/api/shipments");
+
+          if (!response || !response.ok) {
+            throw new Error(response?.error || "Failed to fetch shipments");
+          }
+
+          const tableBody = document.getElementById("shipments-table-body");
+          const { data: shipments } = response;
+
+          if (shipments.length === 0) {
+            tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="empty-state">
+                                لا توجد شحنات حالياً. قم بإنشاء شحنة جديدة للبدء.
+                            </td>
+                        </tr>
+                    `;
+            return;
+          }
+
+          tableBody.innerHTML = shipments.map(createShipmentRow).join("");
+        } catch (error) {
+          console.error("Error loading shipments:", error);
+          document.getElementById("error-message").textContent =
+            "حدث خطأ أثناء تحميل الشحنات";
+          document.getElementById("error-message").style.display = "block";
+        }
+      }
+
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", loadShipments);
+
+      //للتأكد من وجود مكتبة ethers
+      console.log(
+        "Ethers.js Status:",
+        typeof ethers !== "undefined" ? "✔️ Loaded" : "❌ Not Loaded"
+      );
+      // metamask function
+document.addEventListener("click", async (e) => {
+  if (e.target.classList.contains("track-btn")) {
+    e.preventDefault();
+    const shipmentId = e.target.dataset.shipmentId;
+    const trackUrl = e.target.href;
+
+    try {
+      // 1. التحقق من وجود MetaMask
+      if (typeof window.ethereum === "undefined") {
+        alert("يرجى تثبيت MetaMask أولاً!");
+        return;
+      }
+
+      // 2. محاولة الاتصال بـ MetaMask
+      let accounts;
+      try {
+        accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+      } catch (connectionError) {
+        console.error("MetaMask connection error:", connectionError);
+        alert("فشل الاتصال بـ MetaMask: " + (connectionError.message || "تم رفض الطلب"));
+        return;
+      }
+
+      if (!accounts || accounts.length === 0) {
+        alert("لم يتم العثور على حسابات في MetaMask أو تم رفض الوصول");
+        return;
+      }
+
+      const walletAddress = accounts[0];
+      console.log("Connected to MetaMask:", walletAddress);
+
+      // 3.تهيئة العقد الذكي 
+      let provider, signer, contract;
+      try {
+
+        // استخدام ethers.js لإنشاء مزود وموقع
+        provider = new ethers.BrowserProvider(window.ethereum);
+        signer = await provider.getSigner();
+        
+        //   عنوان العقد
+        const contractAddress = "0x23CB6bc478a5655BF5cd0b624c3a8bD3F24D8436";
+        
+        // ABI 
+        const contractABI = [
+          {
+            anonymous: false,
+            inputs: [
+              {
+                indexed: true,
+                internalType: "uint256",
+                name: "date",
+                type: "uint256",
+              },
+              {
+                indexed: false,
+                internalType: "int256",
+                name: "temperature",
+                type: "int256",
+              },
+              {
+                indexed: false,
+                internalType: "uint256",
+                name: "humidity",
+                type: "uint256",
+              },
+              {
+                indexed: false,
+                internalType: "int256",
+                name: "latitude",
+                type: "int256",
+              },
+              {
+                indexed: false,
+                internalType: "int256",
+                name: "longitude",
+                type: "int256",
+              },
+            ],
+            name: "SensorDataAdded",
+            type: "event",
+          },
+          {
+            inputs: [],
+            name: "READING_INTERVAL",
+            outputs: [
+              {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+              },
+            ],
+            stateMutability: "view",
+            type: "function",
+          },
+          {
+            inputs: [
+              {
+                internalType: "int256",
+                name: "_temperature",
+                type: "int256",
+              },
+              {
+                internalType: "uint256",
+                name: "_humidity",
+                type: "uint256",
+              },
+              {
+                internalType: "int256",
+                name: "_latitude",
+                type: "int256",
+              },
+              {
+                internalType: "int256",
+                name: "_longitude",
+                type: "int256",
+              },
+            ],
+            name: "addSensorData",
+            outputs: [],
+            stateMutability: "nonpayable",
+            type: "function",
+          },
+          {
+            inputs: [
+              {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+              },
+            ],
+            name: "dailyReadings",
+            outputs: [
+              {
+                internalType: "uint256",
+                name: "timestamp",
+                type: "uint256",
+              },
+              {
+                internalType: "int256",
+                name: "temperature",
+                type: "int256",
+              },
+              {
+                internalType: "uint256",
+                name: "humidity",
+                type: "uint256",
+              },
+              {
+                internalType: "int256",
+                name: "latitude",
+                type: "int256",
+              },
+              {
+                internalType: "int256",
+                name: "longitude",
+                type: "int256",
+              },
+            ],
+            stateMutability: "view",
+            type: "function",
+          },
+          {
+            inputs: [],
+            name: "getMedicineData",
+            outputs: [
+              {
+                components: [
+                  {
+                    internalType: "int256",
+                    name: "minTemperature",
+                    type: "int256",
+                  },
+                  {
+                    internalType: "int256",
+                    name: "maxTemperature",
+                    type: "int256",
+                  },
+                  {
+                    internalType: "int256",
+                    name: "lastIoTTemperature",
+                    type: "int256",
+                  },
+                  {
+                    internalType: "string",
+                    name: "description",
+                    type: "string",
+                  },
+                ],
+                internalType: "struct IoTMedicineContract.MedicineData",
+                name: "",
+                type: "tuple",
+              },
+            ],
+            stateMutability: "view",
+            type: "function",
+          },
+          {
+            inputs: [
+              {
+                internalType: "uint256",
+                name: "_date",
+                type: "uint256",
+              },
+            ],
+            name: "getReadingsCountForDate",
+            outputs: [
+              {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+              },
+            ],
+            stateMutability: "view",
+            type: "function",
+          },
+          {
+            inputs: [
+              {
+                internalType: "uint256",
+                name: "_date",
+                type: "uint256",
+              },
+            ],
+            name: "getReadingsForDate",
+            outputs: [
+              {
+                components: [
+                  {
+                    internalType: "uint256",
+                    name: "timestamp",
+                    type: "uint256",
+                  },
+                  {
+                    internalType: "int256",
+                    name: "temperature",
+                    type: "int256",
+                  },
+                  {
+                    internalType: "uint256",
+                    name: "humidity",
+                    type: "uint256",
+                  },
+                  {
+                    internalType: "int256",
+                    name: "latitude",
+                    type: "int256",
+                  },
+                  {
+                    internalType: "int256",
+                    name: "longitude",
+                    type: "int256",
+                  },
+                ],
+                internalType: "struct IoTMedicineContract.SensorData[]",
+                name: "",
+                type: "tuple[]",
+              },
+            ],
+            stateMutability: "view",
+            type: "function",
+          },
+          {
+            inputs: [],
+            name: "lastReadingTimestamp",
+            outputs: [
+              {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+              },
+            ],
+            stateMutability: "view",
+            type: "function",
+          },
+          {
+            inputs: [],
+            name: "medicine",
+            outputs: [
+              {
+                internalType: "int256",
+                name: "minTemperature",
+                type: "int256",
+              },
+              {
+                internalType: "int256",
+                name: "maxTemperature",
+                type: "int256",
+              },
+              {
+                internalType: "int256",
+                name: "lastIoTTemperature",
+                type: "int256",
+              },
+              {
+                internalType: "string",
+                name: "description",
+                type: "string",
+              },
+            ],
+            stateMutability: "view",
+            type: "function",
+          },
+          {
+            inputs: [
+              {
+                internalType: "int256",
+                name: "_minTemperature",
+                type: "int256",
+              },
+              {
+                internalType: "int256",
+                name: "_maxTemperature",
+                type: "int256",
+              },
+              {
+                internalType: "string",
+                name: "_description",
+                type: "string",
+              },
+            ],
+            name: "setMedicineData",
+            outputs: [],
+            stateMutability: "nonpayable",
+            type: "function",
+          },
+        ];
+        
+        contract = new ethers.Contract(contractAddress, contractABI, signer);
+        console.log("Smart contract initialized");
+      } catch (contractError) {
+        console.error("Contract initialization error:", contractError);
+        alert("فشل في تهيئة العقد الذكي: " + (contractError.message || "خطأ غير معروف"));
+        return;
+      }
+
+      // 4. تم الاتصال بنجاح بالمحفظة وبالعقد الذكي
+      console.log("تم الاتصال بنجاح بالمحفظة وبالعقد الذكي");
+      alert("تم الاتصال بنجاح بـ MetaMask");
+      
+      // في هذه المرحلة يمكننا فقط استعلام بيانات الشحنة دون إضافة أي بيانات جديدة
+      // لأن بيانات الحساسات يجب أن تأتي من أجهزة IoT
+      try {
+        // استعلام بيانات الدواء لهذه الشحنة
+        const medicineData = await contract.getMedicineData();
+        console.log("Medicine Data:", {
+          minTemperature: medicineData.minTemperature / 10, // تحويل من التنسيق المضروب في 10
+          maxTemperature: medicineData.maxTemperature / 10,
+          lastIoTTemperature: medicineData.lastIoTTemperature / 10,
+          description: medicineData.description
+        });
+        
+        // يمكن هنا عرض رسالة للمستخدم بأن البيانات تم تحميلها بنجاح
+      } catch (readError) {
+        console.warn("Warning: Could not fetch medicine data:", readError);
+        // لا نمنع المستخدم من الاستمرار في حالة فشل قراءة البيانات
+      }
+      
+      // 5. الانتقال إلى صفحة التتبع - فقط بعد التحقق من الاتصال الناجح بـ MetaMask والعقد الذكي
+      console.log("جاري الانتقال إلى صفحة التتبع...");
+      window.location.href = trackUrl;
+    } catch (error) {
+      console.error("Error:", error);
+      alert("حدث خطأ: " + (error.message || "خطأ غير معروف"));
+      return;
+    }
+  }
+});
+    </script>
+  </body>
+</html>

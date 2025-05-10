@@ -1,0 +1,180 @@
+/* New Shipment Form Styles */
+
+.shipment-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.shipment-header {
+  margin-bottom: 2rem;
+  text-align: right;
+}
+
+.shipment-header h1 {
+  color: var(--text-color);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.shipment-form {
+  background: var(--primary-color);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  text-align: right;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-color);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--secondary-color);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-color);
+  font-family: var(--body-font);
+}
+
+.form-group textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--text-color);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.submit-button {
+  background: var(--secondary-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 30px;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 300px;
+  margin: 2rem auto 0;
+  display: block;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: var(--text-color);
+  color: var(--primary-color);
+}
+
+/* Error Message Styles */
+.error-message {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.2);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: right;
+  display: none;
+  border: 1px solid #ff6b6b;
+}
+
+.error-message.visible {
+  display: block;
+}
+
+/* Success Message Styles */
+.success-message {
+  color: #51cf66;
+  background: rgba(81, 207, 102, 0.2);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: right;
+  display: none;
+  border: 1px solid #51cf66;
+}
+
+.success-message.visible {
+  display: block;
+}
+
+/* Loading State */
+.submit-button.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Print Styles */
+@media print {
+  .shipment-container {
+    margin: 0;
+    padding: 0;
+  }
+
+  .shipment-form {
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .submit-button {
+    display: none;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .shipment-container {
+    margin: 1rem;
+  }
+
+  .shipment-form {
+    padding: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 0.5rem;
+  }
+
+  .submit-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .shipment-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .form-group label {
+    font-size: 0.9rem;
+  }
+}

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>حالة الشحنة - تتبع الشحنات</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="/assets/css/status.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+      #map-container {
+        height: 400px;
+        width: 100%;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="shipment-status-container">
+        <div class="shipment-header">
+          <h1>تفاصيل وحالة الشحنة</h1>
+          <button id="qrCodeBtn" class="qr-code-btn">
+            <i class="fas fa-qrcode"></i>
+          </button>
+        </div>
+
+        <!-- QR Code Modal -->
+        <div id="qrModal" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="qrcode" class="qr-code-container"></div>
+            <div class="qr-code-actions">
+              <button id="copyQrBtn" class="action-btn">
+                <i class="fas fa-copy"></i>
+                نسخ الرابط
+              </button>
+              <button id="printQrBtn" class="action-btn">
+                <i class="fas fa-print"></i>
+                طباعة
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="error-message" class="error-message"></div>
+
+        <!-- Shipment Details Section -->
+        <div class="section">
+          <h2>معلومات الشحنة</h2>
+          <div id="shipmentInfo" class="info-grid">
+            <div class="info-item">
+              <label>رقم الشحنة</label>
+              <span id="shipmentId"></span>
+            </div>
+            <div class="info-item">
+              <label>الوصف</label>
+              <span id="shipmentDescription"></span>
+            </div>
+            <div class="info-item">
+              <label>رقم جهاز التتبع</label>
+              <span id="arduinoId"></span>
+            </div>
+            <div class="info-item">
+              <label>الحالة الحالية</label>
+              <span id="currentStatus"></span>
+            </div>
+            <div class="info-item">
+              <label>تاريخ الإنشاء</label>
+              <span id="createdAt"></span>
+            </div>
+            <div class="info-item">
+              <label>درجة الحرارة القصوى</label>
+              <span id="maxTemperature"></span>
+            </div>
+            <div class="info-item">
+              <label>درجة الحرارة الصغرى</label>
+              <span id="minTemperature"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="section">
+          <h2>مسار التتبع</h2>
+          <div id="map-container"></div>
+        </div>
+
+        <!-- Current Readings Section -->
+        <div class="section">
+          <h2>القراءات الحالية</h2>
+          <div class="readings-grid">
+            <div class="reading-item">
+              <div class="reading-icon temperature-icon"></div>
+              <div class="reading-value" id="currentTemperature">--</div>
+              <div class="reading-label">درجة الحرارة</div>
+            </div>
+            <div class="reading-item">
+              <div class="reading-icon humidity-icon"></div>
+              <div class="reading-value" id="currentHumidity">--</div>
+              <div class="reading-label">الرطوبة الحالية</div>
+            </div>
+            <div class="reading-item">
+              <div class="reading-icon location-icon"></div>
+              <div class="reading-value" id="currentLocation">--</div>
+              <div class="reading-label">الموقع</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Section -->
+        <div class="section">
+          <h2>مسار الشحنة</h2>
+          <div id="timeline" class="timeline">
+            <!-- Timeline items will be inserted here by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Sensor Data Charts -->
+        <div class="section">
+          <h2>بيانات المستشعرات</h2>
+          <div class="chart-container">
+            <canvas id="temperatureChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <canvas id="humidityChart"></canvas>
+          </div>
+        </div> 
+        <!-- //////////////////////////  -->
+        <div class="table-container">
+          <table
+            id="filteredReadingsTable"
+            class="table table-striped table-bordered"
+          >
+          <h2 id="no">القراءات الغير طبيعية </h2>
+            <thead class="thead-dark">
+              <tr>
+                <th>درجة الحرارة</th>
+                <th>الرطوبة</th>
+                <th>التاريخ</th>
+                <th>الوقت</th>
+                <th>المكان</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/assets/js/status.js"></script>
+  </body>
+</html>
