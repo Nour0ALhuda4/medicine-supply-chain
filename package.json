@@ -2,20 +2,14 @@
   "name": "backend",
   "version": "1.0.0",
   "engines": {
-    "node": "20.x"
+    "node": ">=20.x"
   },
   "main": "server/app.js",
   "scripts": {
     "start": "node server/app.js",
     "dev": "NODE_ENV=development nodemon server/app.js",
-    "dev:db": "docker compose -f docker-compose.dev.yml up -d",
-    "dev:db:stop": "docker compose -f docker-compose.dev.yml down",
-    "dev:setup": "npm run dev:db && NODE_ENV=development npm run migrate && npm run dev",
     "migrate": "node server/migrations/migrate.js",
     "migrate:status": "NODE_ENV=development node -e \"require('./server/migrations/migrate.js').getAppliedMigrations().then(console.log)\"",
-    "docker:prod": "docker compose up -d --build",
-    "docker:prod:logs": "docker compose logs -f",
-    "docker:prod:stop": "docker compose down",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -24,7 +18,7 @@
   "description": "",
   "dependencies": {
     "axios": "^1.9.0",
-    "bcrypt": "^5.1.1",
+    "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -33,7 +27,7 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "nodemon": "^3.1.10",
-    "pg": "^8.15.6",
+    "pg": "^8.16.0",
     "qrcode": "^1.5.4",
     "serialport": "^13.0.0"
   }
