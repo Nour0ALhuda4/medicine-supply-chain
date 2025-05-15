@@ -4,7 +4,7 @@ const bcryptjs = require("bcryptjs"); // استدعاء مكتبة bcryptjs لت
 const jwt = require("jsonwebtoken"); // استدعاء مكتبة jwt لإنشاء والتحقق من التوكنات
 const pool = require("../models/db"); // استدعاء الاتصال بقاعدة البيانات
 const { jwtSecret } = require("../middleware/auth"); // استدعاء المفتاح السري المستخدم لتشفير التوكنات
-
+   
 // Register a new user
 router.post("/register", async (req, res) => { // إنشاء مسار لتسجيل مستخدم جديد
     try {
