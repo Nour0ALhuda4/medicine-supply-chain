@@ -1,5 +1,5 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
+const bcryptjs = require("bcryptjs");
 const { Pool } = require("pg");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -61,7 +61,7 @@ app.post("/register", async (req, res) => {
     }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcryptjs.hash(password, 10);
 
     // Insert new user into the database
     const insertUserQuery =
@@ -91,7 +91,7 @@ app.post("/login", async (req, res) => {
     const findUser = result.rows[0];
 
     // Compare the hashed password
-    const passwordMatch = await bcrypt.compare(password, findUser.password);
+    const passwordMatch = await bcryptjs.compare(password, findUser.password);
     if (passwordMatch) {
       // Create a JWT token with a payload
       const token = jwt.sign(

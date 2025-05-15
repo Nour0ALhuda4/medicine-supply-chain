@@ -1,6 +1,6 @@
 const express = require("express"); // استدعاء مكتبة express لإنشاء الراوتر
 const router = express.Router(); // إنشاء راوتر جديد للتعامل مع المسارات
-const bcrypt = require("bcrypt"); // استدعاء مكتبة bcrypt لتشفير كلمات السر
+const bcryptjs = require("bcryptjs"); // استدعاء مكتبة bcryptjs لتشفير كلمات السر
 const jwt = require("jsonwebtoken"); // استدعاء مكتبة jwt لإنشاء والتحقق من التوكنات
 const pool = require("../models/db"); // استدعاء الاتصال بقاعدة البيانات
 const { jwtSecret } = require("../middleware/auth"); // استدعاء المفتاح السري المستخدم لتشفير التوكنات
@@ -19,7 +19,7 @@ router.post("/register", async (req, res) => { // إنشاء مسار لتسجي
         }
 
         // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10); // تشفير كلمة السر
+        const hashedPassword = await bcryptjs.hash(password, 10); // تشفير كلمة السر
 
         // Insert new user into the database using hashed_password column
         const insertUserQuery = "INSERT INTO users (username, hashed_password) VALUES ($1, $2) RETURNING *"; // استعلام لإدخال المستخدم الجديد مع كلمة السر المشفرة
@@ -48,7 +48,7 @@ router.post("/login", async (req, res) => { // إنشاء مسار لتسجيل 
         const findUser = result.rows[0]; // جلب بيانات المستخدم من قاعدة البيانات
 
         // Compare the password with hashed_password from database
-        const passwordMatch = await bcrypt.compare(password, findUser.hashed_password); // مقارنة كلمة السر المدخلة مع المشفرة المخزنة في قاعدة البيانات
+        const passwordMatch = await bcryptjs.compare(password, findUser.hashed_password); // مقارنة كلمة السر المدخلة مع المشفرة المخزنة في قاعدة البيانات
         if (passwordMatch) { // إذا تطابقوا
             // Create a JWT token with a payload
             const token = jwt.sign( // إنشاء توكن JWT
