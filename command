@@ -8,11 +8,3 @@ nodemon server/arduino-reader.js
 --To  stop a process running on a specific PID
 taskkill -F -PID {port to process is on}
 
---To open pm2
-pm2 start server/app.js --name medicine-supply-chain
-
---To stop pm2
-pm2 stop 0
-
---ip 
-198.199.84.32
