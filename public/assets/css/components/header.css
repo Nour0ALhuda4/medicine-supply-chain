@@ -150,8 +150,16 @@ nav {
   padding: 0.5rem;
 }
 
-@media screen and (max-width: 768px) {
-  .menu-toggle {
-    display: block;
+/* Hamburger Menu Button - Moved to Right Side */
+  button.menu-toggle#menuToggle {
+    display: block !important;
+    visibility: visible !important;
+    position: absolute !important;
+    top: 15px !important;
+    right: 15px !important; /* Changed from left to right */
+    z-index: 2000 !important;
+    font-size: 24px !important;
+    cursor: pointer !important;
+    color: black !important;
+    padding: 5px !important;
   }
-}
